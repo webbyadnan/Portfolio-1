@@ -1,0 +1,99 @@
+
+> portfolio@0.1.0 build
+> next build
+
+??? Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+node.exe : ??? The 
+"middleware" file 
+convention is deprecated. 
+Please use "proxy" 
+instead. Learn more: https
+://nextjs.org/docs/message
+s/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpe    cified: 
+(??? The     
+"middle...lewar    
+e-to-proxy:Strin    g) 
+[], RemoteExc    eption
+    + FullyQualified    
+ErrorId : Native    
+CommandError
+ 
+  Creating an optimized production build ...
+??? Compiled successfully in 15.9s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/37) ...
+  Generating static pages using 7 workers (9/37) 
+  Generating static pages using 7 workers (18/37) 
+  Generating static pages using 7 workers (27/37) 
+Error fetching projects: {
+  code: 'PGRST205',
+  details: null,
+  hint: "Perhaps you 
+meant the table 
+'public.products'",
+  message: "Could not 
+find the table 
+'public.projects' in the 
+schema cache"
+}
+??? Generating static pages using 7 workers (37/37) in 3.7s
+  Finalizing page optimization ...
+
+Route (app)                                Revalidate  Expire
+??? ??? /
+??? ??? /_not-found
+??? ??? /about
+??? ??? /ai-lab
+??? ?? /api/ai-lab
+??? ?? /api/architect
+??? ?? /api/contact
+??? ??? /architect
+??? ??? /contact
+??? ??? /pricing
+??? ??? /projects                                      1h      1y
+??? ??? /projects/ai-portfolio-builder
+??? ??? /projects/blog-cms
+??? ?? /projects/blog-cms/post/[id]
+??? ??? /projects/e-commerce
+??? ??? /projects/e-commerce/account
+??? ??? /projects/e-commerce/account/orders
+??? ??? /projects/e-commerce/account/profile
+??? ??? /projects/e-commerce/account/wishlist
+??? ??? /projects/e-commerce/admin
+??? ??? /projects/e-commerce/admin/customers
+??? ??? /projects/e-commerce/admin/orders
+??? ??? /projects/e-commerce/admin/products
+??? ??? /projects/e-commerce/admin/settings
+??? ??? /projects/e-commerce/auth/login
+??? ??? /projects/e-commerce/auth/register
+??? ??? /projects/e-commerce/cart
+??? ??? /projects/e-commerce/category
+??? ??? /projects/e-commerce/checkout
+??? ?? /projects/e-commerce/product/[id]
+??? ??? /projects/e-commerce/search
+??? ??? /projects/e-commerce/success
+??? ??? /projects/saas-dashboard
+??? ??? /projects/social-media-api
+??? ??? /robots.txt
+??? ??? /services
+??? ??? /sitemap.xml
+
+
+?? Proxy (Middleware)
+
+???  (Static)   prerendered as static content
+??  (Dynamic)  server-rendered on demand
+
