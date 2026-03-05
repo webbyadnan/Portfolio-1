@@ -17,34 +17,25 @@ const techStack = [
 
 const projects = [
     {
-        title: "E-Commerce",
-        desc: "Full-featured online store with payment integration and real‑time inventory management.",
-        tags: ["Next.js", "Stripe", "Prisma"],
-        slug: "e-commerce"
-    },
-    {
-        title: "SaaS Dashboard",
-        desc: "Real-time analytics dashboard with interactive charts and team collaboration tools.",
-        tags: ["React", "Postgres", "D3.js"],
-        slug: "saas-dashboard"
-    },
-    {
-        title: "Blog CMS",
-        desc: "Headless content management system with markdown editing and instant deployment.",
-        tags: ["Next.js", "MDX", "Vercel"],
-        slug: "blog-cms"
-    },
-    {
-        title: "Social API",
-        desc: "Interactive documentation and endpoint emulator for enterprise social architectures.",
-        tags: ["Node.js", "REST", "Docs"],
-        slug: "social-media-api"
-    },
-    {
         title: "AI Builder",
-        desc: "Generative portfolio constructor with real-time UI simulations and AI logic.",
-        tags: ["AI", "React", "Dynamic"],
-        slug: "ai-portfolio-builder"
+        desc: "An AI-powered landing page builder SaaS that generates stunning, production-ready pages in seconds.",
+        tags: ["Next.js", "NestJS", "Groq AI"],
+        url: "https://aibuilder.adnanxdev.site/",
+        image: "/project-aibuilder.png",
+    },
+    {
+        title: "Resume AI",
+        desc: "Intelligent resume builder powered by AI that crafts compelling, ATS-optimized resumes tailored to job descriptions.",
+        tags: ["Next.js", "Gemini AI", "Firebase"],
+        url: "https://resumeai.adnanxdev.site/",
+        image: "/project-resumeai.png",
+    },
+    {
+        title: "xGPT",
+        desc: "A sleek multi-model AI chat app supporting GPT-4, Claude, Gemini, and open-source models with a premium conversational UI.",
+        tags: ["Next.js", "Groq", "DeepSeek"],
+        url: "https://xgpt.adnanxdev.site/",
+        image: "/project-xgpt.png",
     },
 ];
 
@@ -150,7 +141,7 @@ export function FeaturedProjectsSection() {
             <div className="flex justify-between items-end mb-14">
                 <div>
                     <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">Selected Work</h2>
-                    <p className="text-muted-foreground text-lg">Recent projects I&apos;m proud of</p>
+                    <p className="text-muted-foreground text-lg">Real projects I&apos;ve shipped & deployed</p>
                 </div>
                 <Link
                     href="/projects"
@@ -162,15 +153,25 @@ export function FeaturedProjectsSection() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {projects.map((project, i) => (
-                    <Link
-                        href={`/projects/${project.slug}`}
+                    <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         key={i}
                         className="group block"
                     >
                         <div className="aspect-[4/3] bg-card rounded-xl border border-border mb-5 relative overflow-hidden card-hover group-hover:border-primary">
-                            <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors duration-300" />
+                            <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             <div className="absolute bottom-3 left-3 text-xs font-bold bg-background/90 px-3 py-1.5 rounded-lg border border-border text-muted-foreground">
                                 0{i + 1}
+                            </div>
+                            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <Sparkles className="w-4 h-4 text-primary" />
                             </div>
                         </div>
 
@@ -186,7 +187,7 @@ export function FeaturedProjectsSection() {
                                 </span>
                             ))}
                         </div>
-                    </Link>
+                    </a>
                 ))}
             </div>
 

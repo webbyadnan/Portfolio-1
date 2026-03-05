@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Download, Briefcase, GraduationCap, Code2, Terminal, Database, Cloud } from 'lucide-react';
+import { Download, GraduationCap, Code2, Terminal, Database, Cloud } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -14,47 +14,13 @@ const skills = {
     cloud: { items: ['AWS', 'Vercel', 'Git/GitHub', 'CI/CD'], color: 'bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20', icon: Cloud },
 };
 
-const experience = [
-    {
-        title: 'Senior Full Stack Developer',
-        company: 'Freelance',
-        period: '2022 - Present',
-        description: 'Building custom web applications for clients worldwide. Specializing in Next.js, React, and modern backend technologies.',
-        achievements: [
-            'Developed 50+ production-ready web applications',
-            'Maintained 98% client satisfaction rate',
-            'Implemented scalable architectures serving 100K+ users',
-        ],
-    },
-    {
-        title: 'Full Stack Developer',
-        company: 'Tech Solutions',
-        period: '2020 - 2022',
-        description: 'Worked on enterprise-level applications using React, Node.js, and AWS.',
-        achievements: [
-            'Led team of 5 developers on major projects',
-            'Reduced application load time by 60%',
-            'Implemented automated testing and CI/CD pipelines',
-        ],
-    },
-    {
-        title: 'Web Developer',
-        company: 'Digital Agency',
-        period: '2019 - 2020',
-        description: 'Created responsive websites and web applications for various clients.',
-        achievements: [
-            'Built 30+ responsive websites',
-            'Improved SEO rankings for client websites',
-            'Mentored junior developers',
-        ],
-    },
-];
+
 
 const education = [
     {
         degree: 'Bachelor of Computer Science',
-        institution: 'University of Swat',
-        period: '2015 - 2019',
+        institution: 'Iqra National University Swat Campus',
+        period: '2024 - Ongoing',
         description: 'Focused on software engineering, web technologies, and database systems.',
     },
 ];
@@ -68,7 +34,7 @@ export default function AboutPage() {
                     About <span className="text-primary">Me</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl font-medium leading-relaxed">
-                    I&apos;m a passionate Full Stack Web Developer with over 5 years of experience building modern,
+                    I&apos;m a passionate Full Stack Web Developer with 2 years of experience building modern,
                     scalable web applications. Based in Swat, Pakistan, I specialize in creating seamless digital
                     experiences that solve real-world problems.
                 </p>
@@ -109,45 +75,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Experience */}
-            <section className="mb-24">
-                <div className="flex items-center gap-3 mb-10">
-                    <span className="p-2 rounded-lg bg-primary/10 text-primary border border-primary/20">
-                        <Briefcase className="h-5 w-5" />
-                    </span>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Work Experience</h2>
-                </div>
 
-                <div className="space-y-8">
-                    {experience.map((job, index) => (
-                        <div key={index} className="relative pl-8 border-l-2 border-border group hover:border-primary transition-colors duration-500">
-                            {/* Timeline Dot */}
-                            <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-card border-2 border-border group-hover:border-primary group-hover:bg-primary transition-all duration-500" />
-
-                            <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-3">
-                                <div>
-                                    <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors duration-300">{job.title}</h3>
-                                    <p className="text-muted-foreground mt-0.5">{job.company}</p>
-                                </div>
-                                <span className="text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary px-3 py-1.5 rounded-md mt-2 md:mt-0 w-fit">
-                                    {job.period}
-                                </span>
-                            </div>
-
-                            <p className="text-muted-foreground mb-4 max-w-2xl">{job.description}</p>
-
-                            <ul className="space-y-2">
-                                {job.achievements.map((achievement, i) => (
-                                    <li key={i} className="text-sm text-muted-foreground flex items-start">
-                                        <span className="mr-3 mt-2 w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors duration-300 shrink-0" />
-                                        <span>{achievement}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-            </section>
 
             {/* Education */}
             <section className="mb-24">

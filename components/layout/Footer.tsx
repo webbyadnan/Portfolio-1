@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Linkedin, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 
 const footerLinks = {
     navigation: [
@@ -22,9 +22,8 @@ const footerLinks = {
 };
 
 const socialLinks = [
-    { icon: Github, href: '#', label: 'GitHub', hoverColor: 'hover:bg-slate-700 hover:text-white dark:hover:bg-slate-300 dark:hover:text-slate-900' },
+    { icon: Github, href: 'https://github.com/webbyadnan', label: 'GitHub', hoverColor: 'hover:bg-slate-700 hover:text-white dark:hover:bg-slate-300 dark:hover:text-slate-900' },
     { icon: Linkedin, href: '#', label: 'LinkedIn', hoverColor: 'hover:bg-blue-600 hover:text-white' },
-    { icon: Twitter, href: '#', label: 'Twitter', hoverColor: 'hover:bg-sky-500 hover:text-white' },
 ];
 
 export function Footer() {
