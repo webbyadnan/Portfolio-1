@@ -92,24 +92,12 @@ export default function AILabPage() {
 
             if (!res.ok) throw new Error("Failed to fetch");
 
-            const reader = res.body?.getReader();
-            const decoder = new TextDecoder();
+            const data = await res.json();
 
-            if (!reader) throw new Error("No reader available");
-
-            let accumulated = "";
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                accumulated += decoder.decode(value, { stream: true });
-
-                setHistory(prev => ({
-                    ...prev,
-                    [currentToolId]: { user: currentInput, ai: accumulated }
-                }));
-            }
+            setHistory(prev => ({
+                ...prev,
+                [currentToolId]: { user: currentInput, ai: data.content }
+            }));
         } catch (error) {
             console.error("AI Lab Error:", error);
             setHistory(prev => ({
