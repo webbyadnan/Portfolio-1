@@ -50,6 +50,19 @@ const LOCAL_PROJECTS: Project[] = [
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
     },
+    {
+        id: 'xfer',
+        title: 'XFER - P2P File Transfer',
+        description: 'A high-speed, professional-grade P2P file-sharing web application enabling seamless, serverless file transfers between devices on the same local network.',
+        image: '/project-xfer.png',
+        tech_stack: ['React', 'Vite', 'PeerJS', 'MQTT', 'Tailwind CSS'],
+        live_url: 'https://xfer.adnanxdev.site/',
+        github_url: 'https://github.com/adnanxdev/p2p-file-transfer',
+        featured: true,
+        category: 'Web App / Utility',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+    },
 ];
 
 async function getProjects() {
