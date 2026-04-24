@@ -63,6 +63,19 @@ const LOCAL_PROJECTS: Project[] = [
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
     },
+    {
+        id: 'mockapi',
+        title: 'MockAPI Builder',
+        description: 'A collaborative platform for creating, managing, and mocking APIs. Features real-time team collaboration, dynamic endpoint creation, and secure authentication.',
+        image: '/project-mockapi.png',
+        tech_stack: ['Next.js', 'TypeScript', 'Prisma', 'Tailwind CSS'],
+        live_url: 'https://mockapi.adnanxdev.site/',
+        github_url: 'https://github.com/adnanxdev/mockapi-builder',
+        featured: true,
+        category: 'Web App / Tool',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+    },
 ];
 
 async function getProjects() {
