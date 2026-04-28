@@ -33,8 +33,19 @@ export function middleware(request: NextRequest) {
         return NextResponse.rewrite(new URL(`${targetPath}${url.pathname === '/' ? '' : url.pathname}`, request.url));
     }
 
-    // Check if the path is an admin route (existing logic)
+    // Check if the path is an admin route
     if (url.pathname.startsWith('/admin')) {
+        // Allow access to login page
+        if (url.pathname === '/admin/login') {
+            return NextResponse.next();
+        }
+
+        // Check for session cookie
+        const session = request.cookies.get('admin_session');
+        if (!session || session.value !== 'authenticated') {
+            return NextResponse.redirect(new URL('/admin/login', request.url));
+        }
+
         return NextResponse.next();
     }
 

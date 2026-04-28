@@ -1,34 +1,29 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Space_Grotesk, Space_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeTransitionProvider } from "@/components/ui/theme-transition";
-import { CustomCursor } from "@/components/ui/custom-cursor";
-import { ScrollProgress } from "@/components/ui/scroll-progress";
-import { CommandPalette } from "@/components/ui/command-palette";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { FloatingAssistant } from "@/components/ai/FloatingAssistant";
+import { VisitorTracker } from "@/components/analytics/VisitorTracker";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-plus-jakarta",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const caveat = Caveat({
   subsets: ["latin"],
-  display: "swap",
-  variable: "--font-space-grotesk",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-handwriting",
 });
 
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-space-mono",
-  weight: ["400", "700"],
-});
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -72,21 +67,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Adnan Khan",
+    "url": "https://adnanxdev.site",
+    "jobTitle": "Full Stack Developer",
+    "sameAs": [
+      "https://github.com/webbyadnan",
+      "https://www.linkedin.com/in/adnan-khan-b9034a31a/"
+    ],
+    "description": "Full Stack Developer specializing in Next.js, React, and modern web technologies."
+  };
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${plusJakarta.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <ThemeTransitionProvider>
-            <CustomCursor />
-            <ScrollProgress />
-            <CommandPalette />
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-          </ThemeTransitionProvider>
-        </ThemeProvider>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className={`${inter.variable} ${caveat.variable} font-sans bg-background text-foreground antialiased`}>
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <FloatingAssistant />
+          <VisitorTracker />
+        </div>
       </body>
     </html>
   );

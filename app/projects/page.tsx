@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ProjectsClient } from './projects-client';
-import { supabase } from '@/lib/supabase';
+import { prisma } from '@/lib/prisma';
 import { Project } from '@/types';
 
 export const metadata: Metadata = {
@@ -10,91 +10,29 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600; // Revalidate every hour
 
-const LOCAL_PROJECTS: Project[] = [
-    {
-        id: 'aibuilder',
-        title: 'AI Builder',
-        description: 'An AI-powered landing page builder SaaS that lets users generate stunning, production-ready landing pages in seconds using advanced AI models.',
-        image: '/project-aibuilder.png',
-        tech_stack: ['Next.js', 'TypeScript', 'Firebase', 'NestJS', 'Groq AI'],
-        live_url: 'https://aibuilder.adnanxdev.site/',
-        github_url: 'https://github.com/adnanxdev/ai-builder',
-        featured: true,
-        category: 'AI / SaaS',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    },
-    {
-        id: 'resumeai',
-        title: 'Resume AI',
-        description: 'An intelligent resume builder powered by AI that helps users craft compelling, ATS-optimized resumes tailored to specific job descriptions.',
-        image: '/project-resumeai.png',
-        tech_stack: ['Next.js', 'TypeScript', 'Gemini AI', 'Firebase', 'Tailwind'],
-        live_url: 'https://resumeai.adnanxdev.site/',
-        github_url: 'https://github.com/adnanxdev/resume-ai',
-        featured: true,
-        category: 'AI / Tool',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    },
-    {
-        id: 'xgpt',
-        title: 'xGPT',
-        description: 'A sleek, multi-model AI chat application supporting GPT-4, Claude, Gemini, and open-source models with a premium conversational UI.',
-        image: '/project-xgpt.png',
-        tech_stack: ['Next.js', 'TypeScript', 'Groq', 'DeepSeek', 'Firebase'],
-        live_url: 'https://xgpt.adnanxdev.site/',
-        github_url: 'https://github.com/adnanxdev/xgpt',
-        featured: true,
-        category: 'AI / App',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    },
-    {
-        id: 'xfer',
-        title: 'XFER - P2P File Transfer',
-        description: 'A high-speed, professional-grade P2P file-sharing web application enabling seamless, serverless file transfers between devices on the same local network.',
-        image: '/project-xfer.png',
-        tech_stack: ['React', 'Vite', 'PeerJS', 'MQTT', 'Tailwind CSS'],
-        live_url: 'https://xfer.adnanxdev.site/',
-        github_url: 'https://github.com/adnanxdev/p2p-file-transfer',
-        featured: true,
-        category: 'Web App / Utility',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    },
-    {
-        id: 'mockapi',
-        title: 'MockAPI Builder',
-        description: 'A collaborative platform for creating, managing, and mocking APIs. Features real-time team collaboration, dynamic endpoint creation, and secure authentication.',
-        image: '/project-mockapi.png',
-        tech_stack: ['Next.js', 'TypeScript', 'Prisma', 'Tailwind CSS'],
-        live_url: 'https://mockapi.adnanxdev.site/',
-        github_url: 'https://github.com/adnanxdev/mockapi-builder',
-        featured: true,
-        category: 'Web App / Tool',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    },
-];
-
 async function getProjects() {
     try {
-        const { data: projects, error } = await supabase
-            .from('projects')
-            .select('*')
-            .order('created_at', { ascending: false });
+        const dbProjects = await prisma.project.findMany({
+            orderBy: { num: 'asc' },
+        });
 
-        if (error) {
-            console.error('Error fetching projects:', error);
-            return LOCAL_PROJECTS;
-        }
-
-        // Merge local projects with DB projects, keeping local unique
-        const dbProjects = projects || [];
-        return [...LOCAL_PROJECTS, ...dbProjects];
+        return dbProjects.map(p => ({
+            id: p.id,
+            title: p.title,
+            description: p.desc,
+            image: p.image,
+            tech_stack: p.tags,
+            live_url: p.url,
+            github_url: p.githubUrl || '',
+            featured: true,
+            category: p.category || 'Web App',
+            created_at: p.createdAt.toISOString(),
+            updated_at: p.updatedAt.toISOString(),
+            video_url: p.videoUrl
+        })) as Project[];
     } catch (err) {
-        return LOCAL_PROJECTS;
+        console.error('Failed to fetch projects', err);
+        return [];
     }
 }
 

@@ -4,8 +4,9 @@ import { Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react';
 const links = {
     work: [
         { label: 'Projects', href: '/projects' },
+        { label: 'Blog', href: '/blog' },
         { label: 'Services', href: '/services' },
-        { label: 'AI Lab', href: '/ai-lab' },
+        { label: 'AI Assistant', href: '/ai-lab' },
         { label: 'Pricing', href: '/pricing' },
     ],
     info: [

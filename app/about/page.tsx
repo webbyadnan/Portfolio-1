@@ -77,10 +77,14 @@ export default function AboutPage() {
                             clean code, and delightful user interfaces.
                         </p>
                         <div className="flex flex-wrap gap-3">
-                            <button className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-bold rounded-2xl hover:opacity-90 transition-opacity">
+                            <a
+                                href="/Adnan_KhanCv (1).pdf"
+                                download
+                                className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-bold rounded-2xl hover:opacity-90 transition-opacity"
+                            >
                                 <Download className="w-4 h-4" />
                                 Download CV
-                            </button>
+                            </a>
                             <Link
                                 href="/contact"
                                 className="inline-flex items-center gap-2 px-7 py-3.5 border border-border bg-secondary font-bold rounded-2xl hover:border-primary hover:text-primary transition-all"

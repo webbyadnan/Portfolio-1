@@ -1,272 +1,274 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-    MessageSquare,
-    Flame,
-    Code2,
-    Bug,
-    Send,
-    Sparkles,
-    ChevronRight,
-    Zap,
-    Brain
-} from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Send, Zap, Brain, Atom, User, Trash2, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 
-const TOOLS = [
-    {
-        id: "qa",
-        name: "Portfolio Q&A",
-        description: "Ask anything about Adnan's skills and projects.",
-        icon: MessageSquare,
-        color: "text-blue-500",
-        bgColor: "bg-blue-500/10",
-        prompt: "Ask me about Adnan's Next.js experience or his latest projects..."
-    },
-    {
-        id: "roaster",
-        name: "Project Roaster",
-        description: "Get a witty senior dev critique of your idea.",
-        icon: Flame,
-        color: "text-orange-500",
-        bgColor: "bg-orange-500/10",
-        prompt: "Paste your project idea or code here for a roast..."
-    },
-    {
-        id: "generator",
-        name: "Component Generator",
-        description: "Describe a UI component, get React code.",
-        icon: Code2,
-        color: "text-purple-500",
-        bgColor: "bg-purple-500/10",
-        prompt: "Describe the component (e.g. 'A glassy landing page hero')..."
-    },
-    {
-        id: "fixer",
-        name: "Error Fixer",
-        description: "Paste your error log and get an instant fix.",
-        icon: Bug,
-        color: "text-red-500",
-        bgColor: "bg-red-500/10",
-        prompt: "Paste your error message or stack trace..."
-    }
-];
+type Message = {
+    role: "user" | "ai" | "system";
+    content: string;
+};
+
+const INITIAL_MESSAGE: Message = {
+    role: "ai",
+    content: "Hi there! I am Adnan's Digital Twin and Assistant. You can ask me anything about his skills, projects, and background, or use me to help with your daily coding tasks. How can I help you today?"
+};
 
 export default function AILabPage() {
-    const [activeTool, setActiveTool] = useState(TOOLS[0]);
-    const [model, setModel] = useState<"groq" | "deepseek">("groq");
     const [input, setInput] = useState("");
-    const [history, setHistory] = useState<Record<string, { user: string; ai: string }>>({});
+    const [model, setModel] = useState<"groq" | "deepseek">("groq");
+    const [history, setHistory] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    // Load history from localStorage on mount
+    useEffect(() => {
+        const savedHistory = localStorage.getItem("adnan-assistant-history");
+        if (savedHistory) {
+            try {
+                setHistory(JSON.parse(savedHistory));
+            } catch (e) {
+                setHistory([INITIAL_MESSAGE]);
+            }
+        } else {
+            setHistory([INITIAL_MESSAGE]);
+        }
+    }, []);
+
+    // Save history to localStorage on change
+    useEffect(() => {
+        if (history.length > 0) {
+            localStorage.setItem("adnan-assistant-history", JSON.stringify(history));
+        }
+    }, [history]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [history, isLoading]);
+
+    const handleClearChat = () => {
+        if (confirm("Are you sure you want to clear the conversation history?")) {
+            setHistory([INITIAL_MESSAGE]);
+            localStorage.removeItem("adnan-assistant-history");
+            inputRef.current?.focus();
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const currentInput = input;
         if (!currentInput.trim() || isLoading) return;
 
-        // Clear input immediately for better UX
         setInput("");
         setIsLoading(true);
 
-        // Capture the id of the tool that initiated the request
-        const currentToolId = activeTool.id;
-
-        // Initialize history with user message and empty AI response
-        setHistory(prev => ({
-            ...prev,
-            [currentToolId]: { user: currentInput, ai: "..." }
-        }));
+        const newHistory = [...history, { role: "user" as const, content: currentInput }];
+        
+        setHistory([
+            ...newHistory,
+            { role: "ai", content: "..." }
+        ]);
 
         try {
+            // Map our local history to the API format (ignoring initial if needed, but we can pass it all)
+            const apiMessages = newHistory.map(msg => ({
+                role: msg.role === 'ai' ? 'assistant' : 'user',
+                content: msg.content
+            }));
+
             const res = await fetch("/api/ai-lab", {
                 method: "POST",
                 body: JSON.stringify({
-                    message: currentInput,
-                    type: currentToolId,
+                    messages: apiMessages,
                     model
                 }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
 
             if (!res.ok) throw new Error("Failed to fetch");
 
             const data = await res.json();
 
-            setHistory(prev => ({
-                ...prev,
-                [currentToolId]: { user: currentInput, ai: data.content }
-            }));
+            setHistory(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { role: "ai", content: data.content };
+                return updated;
+            });
         } catch (error) {
             console.error("AI Lab Error:", error);
-            setHistory(prev => ({
-                ...prev,
-                [currentToolId]: { user: currentInput, ai: "Oops! Something went wrong. Please check your connection and try again." }
-            }));
+            setHistory(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { 
+                    role: "ai", 
+                    content: "System Error: Connection failed. Please try again." 
+                };
+                return updated;
+            });
         } finally {
             setIsLoading(false);
+            inputRef.current?.focus();
         }
     };
 
-    const currentChat = history[activeTool.id];
-
     return (
-        <main className="min-h-screen pt-24 pb-12 bg-slate-950 text-white selection:bg-primary/30">
-            <div className="container mx-auto px-6 max-w-6xl">
+        <main className="h-[100dvh] md:min-h-screen pt-20 md:pt-28 pb-4 md:pb-12 bg-background text-foreground flex flex-col">
+            <div className="container mx-auto px-4 md:px-6 max-w-5xl flex-1 flex flex-col min-h-0">
+                
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 shrink-0">
                     <div>
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-blue-500 mb-2"
-                        >
-                            AI Lab
-                        </motion.h1>
-                        <p className="text-slate-400 text-lg">Interactive experiments powered by high-speed neural networks.</p>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
+                                <Bot className="w-5 h-5" />
+                            </div>
+                            <h1 className="text-3xl font-bold tracking-tight">Adnan's Assistant</h1>
+                        </div>
+                        <p className="text-muted-foreground text-sm">
+                            Your personal digital twin. Ask about Adnan or use me as a coding assistant!
+                        </p>
                     </div>
 
-                    {/* Model Switcher */}
-                    <div className="flex p-1 bg-slate-900 rounded-xl border border-slate-800 shadow-2xl">
+                    {/* Controls */}
+                    <div className="flex items-center gap-4">
                         <button
-                            onClick={() => setModel("groq")}
-                            className={cn(
-                                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300",
-                                model === "groq" ? "bg-primary text-white shadow-lg" : "text-slate-500 hover:text-slate-300"
-                            )}
+                            onClick={handleClearChat}
+                            className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
+                            title="Clear Chat"
                         >
-                            <Zap className="w-4 h-4" /> Groq (Fast)
+                            <Trash2 className="w-4 h-4" />
                         </button>
-                        <button
-                            onClick={() => setModel("deepseek")}
-                            className={cn(
-                                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300",
-                                model === "deepseek" ? "bg-primary text-white shadow-lg" : "text-slate-500 hover:text-slate-300"
-                            )}
-                        >
-                            <Brain className="w-4 h-4" /> DeepSeek (Logic)
-                        </button>
+                        <div className="flex p-1 bg-secondary rounded-lg border border-border">
+                            <button
+                                onClick={() => setModel("groq")}
+                                className={cn(
+                                    "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
+                                    model === "groq" ? "bg-background text-foreground shadow-sm border border-border/50" : "text-muted-foreground hover:text-foreground"
+                                )}
+                            >
+                                <Zap className="w-3.5 h-3.5" /> Fast
+                            </button>
+                            <button
+                                onClick={() => setModel("deepseek")}
+                                className={cn(
+                                    "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
+                                    model === "deepseek" ? "bg-background text-foreground shadow-sm border border-border/50" : "text-muted-foreground hover:text-foreground"
+                                )}
+                            >
+                                <Brain className="w-3.5 h-3.5" /> Logic
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {/* Sidebar / Tool Selection */}
-                    <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                        {TOOLS.map((tool) => (
-                            <button
-                                key={tool.id}
-                                onClick={() => setActiveTool(tool)}
-                                className={cn(
-                                    "relative group flex flex-col p-5 rounded-2xl border transition-all duration-500 text-left overflow-hidden",
-                                    activeTool.id === tool.id
-                                        ? "bg-slate-900 border-primary/50 ring-1 ring-primary/20"
-                                        : "bg-slate-900/40 border-slate-800 hover:border-slate-700"
-                                )}
-                            >
-                                <div className={cn("p-2 w-fit rounded-lg mb-4 transition-transform group-hover:scale-110", tool.bgColor)}>
-                                    <tool.icon className={cn("w-6 h-6", tool.color)} />
+                {/* Main Interface Area */}
+                <div className="flex-1 flex flex-col bg-card border border-border rounded-2xl overflow-hidden shadow-sm relative min-h-0">
+                    
+                    {/* Chat History */}
+                    <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8 scrollbar-hide">
+                        {history.map((msg, idx) => (
+                            <div key={idx} className={cn("flex gap-4 max-w-[95%] md:max-w-[85%]", msg.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto")}>
+                                <div className={cn(
+                                    "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1",
+                                    msg.role === "user" ? "bg-secondary" : "bg-primary text-primary-foreground"
+                                )}>
+                                    {msg.role === "user" ? <User className="w-4 h-4 text-muted-foreground" /> : <Atom className="w-4 h-4 animate-[spin_4s_linear_infinite]" />}
                                 </div>
-                                <h3 className="text-lg font-bold mb-1">{tool.name}</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed">{tool.description}</p>
-
-                                {activeTool.id === tool.id && (
-                                    <motion.div
-                                        layoutId="toolBadge"
-                                        className="absolute top-4 right-4"
-                                    >
-                                        <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-                                    </motion.div>
-                                )}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Playground Interface */}
-                    <div className="lg:col-span-8 flex flex-col gap-6">
-                        <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col h-full min-h-[500px]">
-
-                            {/* Interaction UI */}
-                            <div className="flex-1 flex flex-col gap-6">
-                                <div className="flex items-center gap-3 pb-6 border-b border-slate-800">
-                                    <div className={cn("p-2 rounded-lg", activeTool.bgColor)}>
-                                        <activeTool.icon className={cn("w-5 h-5", activeTool.color)} />
+                                
+                                <div className="space-y-1 overflow-hidden min-w-0">
+                                    <div className={cn(
+                                        "flex items-center gap-2 text-xs font-semibold mb-1",
+                                        msg.role === "user" ? "justify-end text-muted-foreground" : "text-primary"
+                                    )}>
+                                        {msg.role === "user" ? "You" : "Adnan's Assistant"}
                                     </div>
-                                    <h2 className="text-xl font-bold">{activeTool.name} Playground</h2>
-                                </div>
-
-                                {/* Response Log */}
-                                <div className="flex-1 overflow-y-auto space-y-6 min-h-[250px] relative scrollbar-hide py-4">
-                                    <AnimatePresence mode="wait">
-                                        {currentChat ? (
-                                            <motion.div
-                                                key={activeTool.id + currentChat.user}
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                className="space-y-6"
-                                            >
-                                                {/* User Message */}
-                                                <div className="flex justify-end">
-                                                    <div className="bg-primary/10 border border-primary/20 px-5 py-3 rounded-2xl max-w-[80%] text-sm text-primary-foreground/90">
-                                                        {currentChat.user}
-                                                    </div>
-                                                </div>
-                                                {/* AI Response */}
-                                                <div className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700 font-mono text-sm whitespace-pre-wrap leading-relaxed">
-                                                    {currentChat.ai}
-                                                </div>
-                                            </motion.div>
-                                        ) : !isLoading && (
-                                            <motion.div
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                className="h-full flex flex-col items-center justify-center text-slate-600 italic py-12"
-                                            >
-                                                <activeTool.icon className="w-12 h-12 mb-4 opacity-20" />
-                                                Enter a prompt to start {activeTool.name}...
-                                            </motion.div>
+                                    
+                                    <div className={cn(
+                                        "text-sm leading-relaxed prose prose-invert max-w-none break-words",
+                                        msg.role === "user" ? "text-right" : "text-foreground"
+                                    )}>
+                                        {msg.content === "..." ? (
+                                            <span className="flex items-center gap-1 text-muted-foreground py-2">
+                                                <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" />
+                                                <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]" />
+                                                <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.4s]" />
+                                            </span>
+                                        ) : (
+                                            msg.role === "user" ? (
+                                                <p className="whitespace-pre-wrap">{msg.content}</p>
+                                            ) : (
+                                                <ReactMarkdown 
+                                                    remarkPlugins={[remarkGfm]} 
+                                                    rehypePlugins={[rehypeHighlight]}
+                                                    components={{
+                                                        p: ({node, ...props}) => <p className="mb-3 last:mb-0 leading-relaxed" {...props} />,
+                                                        pre: ({node, ...props}) => <pre className="bg-[#0d1117] border border-border rounded-lg p-4 my-3 overflow-x-auto text-xs font-mono shadow-sm" {...props} />,
+                                                        code: ({node, className, children, ...props}) => {
+                                                            const match = /language-(\w+)/.exec(className || '');
+                                                            const isInline = !match && !className?.includes('hljs');
+                                                            return isInline 
+                                                                ? <code className="bg-secondary/50 text-primary border border-border/50 rounded px-1.5 py-0.5 text-[0.8em] font-mono" {...props}>{children}</code>
+                                                                : <code className={className} {...props}>{children}</code>;
+                                                        },
+                                                        ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-3 space-y-1" {...props} />,
+                                                        ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-3 space-y-1" {...props} />,
+                                                        li: ({node, ...props}) => <li className="pl-1" {...props} />,
+                                                        a: ({node, ...props}) => <a className="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer" {...props} />,
+                                                        strong: ({node, ...props}) => <strong className="font-bold text-foreground" {...props} />,
+                                                        h1: ({node, ...props}) => <h1 className="text-xl font-bold mt-4 mb-2" {...props} />,
+                                                        h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-4 mb-2" {...props} />,
+                                                        h3: ({node, ...props}) => <h3 className="text-base font-bold mt-3 mb-2" {...props} />,
+                                                    }}
+                                                >
+                                                    {msg.content}
+                                                </ReactMarkdown>
+                                            )
                                         )}
-                                    </AnimatePresence>
-                                    {isLoading && (
-                                        <div className="flex items-center gap-2 text-primary animate-pulse py-2">
-                                            <Sparkles className="w-4 h-4" /> Thinking with {model === "groq" ? "Groq" : "DeepSeek"}...
-                                        </div>
-                                    )}
+                                    </div>
                                 </div>
-
-                                {/* Input Area */}
-                                <form onSubmit={handleSubmit} className="relative group mt-auto">
-                                    <textarea
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        placeholder={activeTool.prompt}
-                                        className="w-full bg-slate-800/50 border border-slate-700 rounded-2xl px-5 py-4 pr-16 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none h-32 text-sm md:text-base"
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter" && !e.shiftKey) {
-                                                e.preventDefault();
-                                                handleSubmit(e);
-                                            }
-                                        }}
-                                    />
-                                    <Button
-                                        type="submit"
-                                        disabled={isLoading || !input}
-                                        className="absolute right-3 bottom-3 h-10 w-10 p-0 rounded-xl bg-primary hover:bg-primary/80 text-white shadow-xl shadow-primary/20"
-                                    >
-                                        <Send className="w-5 h-5" />
-                                    </Button>
-                                </form>
                             </div>
-
-                            {/* Decorative Mesh */}
-                            <div className="absolute top-0 right-0 -z-10 w-64 h-64 bg-primary/5 blur-[100px] rounded-full" />
-                            <div className="absolute bottom-0 left-0 -z-10 w-64 h-64 bg-blue-500/5 blur-[100px] rounded-full" />
-                        </div>
-
-                        <p className="text-center text-xs text-slate-600 px-4">
-                            Generated content may be inaccurate. Experiments are powered by {model === "groq" ? "Llama 3.3 (Groq)" : "DeepSeek-V3"}.
-                        </p>
+                        ))}
+                        <div ref={messagesEndRef} />
                     </div>
+
+                    {/* Input Area */}
+                    <div className="p-3 md:p-4 border-t border-border bg-card shrink-0">
+                        <form onSubmit={handleSubmit} className="relative flex items-end">
+                            <textarea
+                                ref={inputRef}
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Ask me about Adnan's projects, skills, or ask a coding question..."
+                                disabled={isLoading}
+                                className="w-full bg-background border border-border rounded-xl pl-4 pr-14 py-4 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all resize-none min-h-[56px] max-h-[150px] text-base md:text-sm disabled:opacity-50 shadow-inner scrollbar-hide"
+                                rows={1}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSubmit(e);
+                                    }
+                                }}
+                            />
+                            <button
+                                type="submit"
+                                disabled={isLoading || !input.trim()}
+                                className="absolute right-2 bottom-2 h-[40px] w-[40px] flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                            >
+                                <Send className="w-4 h-4" />
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </main>

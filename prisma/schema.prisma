@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  desc        String
+  category    String   @default("Web App")
+  tags        String[] // Array of strings for tags
+  url         String
+  image       String
+  num         String
+  githubUrl   String?
+  videoUrl    String?  // For hover videos
+  seoTitle       String?
+  seoDescription String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BlogPost {
+  id             String    @id @default(cuid())
+  slug           String    @unique
+  title          String
+  excerpt        String
+  content        String    // MDX or Markdown content
+  published      Boolean   @default(false)
+  likes          Int       @default(0)
+  dislikes       Int       @default(0)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  comments       Comment[]
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  authorName  String   @default("Anonymous")
+  blogPostId  String
+  blogPost    BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  message     String
+  createdAt   DateTime @default(now())
+}
+
+model Visitor {
+  id        String   @id @default(cuid())
+  ip        String
+  userAgent String
+  device    String?
+  os        String?
+  browser   String?
+  city      String?
+  country   String?
+  createdAt DateTime @default(now())
+}
