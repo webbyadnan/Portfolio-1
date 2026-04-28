@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import { Card } from '@/components/ui/card';
 import { Users, Layout, MessageSquare, BookOpen, Monitor, Smartphone, Tablet } from 'lucide-react';
