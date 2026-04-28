@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { HeroSection, TechStackSection, FeaturedProjectsSection, CTASection } from '@/components/home/sections';
 import { prisma } from '@/lib/prisma';
 import { getRepoStats } from '@/lib/github';
