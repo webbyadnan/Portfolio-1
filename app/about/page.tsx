@@ -78,7 +78,7 @@ export default function AboutPage() {
                         </p>
                         <div className="flex flex-wrap gap-3">
                             <a
-                                href="/Adnan_KhanCv (1).pdf"
+                                href="/Adnan_Khan_CV_Updated.docx"
                                 download
                                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-bold rounded-2xl hover:opacity-90 transition-opacity"
                             >
