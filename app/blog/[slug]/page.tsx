@@ -11,9 +11,11 @@ import { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const post = await prisma.blogPost.findUnique({
-        where: { slug }
-    });
+    const post = process.env.NODE_ENV === 'development'
+        ? null
+        : await prisma.blogPost.findUnique({
+            where: { slug }
+        }).catch(() => null);
 
     if (!post) return { title: 'Post Not Found' };
 
@@ -30,9 +32,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const post = await prisma.blogPost.findUnique({
-        where: { slug }
-    });
+    const post = process.env.NODE_ENV === 'development'
+        ? null
+        : await prisma.blogPost.findUnique({
+            where: { slug }
+        }).catch(() => null);
 
     if (!post || !post.published) {
         notFound();

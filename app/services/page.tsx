@@ -1,17 +1,18 @@
 import type { Metadata } from 'next';
 import { Code2, Database, Cloud, Wrench, Rocket, Cpu, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
+import { siteDescription } from '@/lib/portfolio';
 
 export const metadata: Metadata = {
     title: 'Services',
-    description: 'Professional web development services — full stack, SaaS, API, and cloud deployment.',
+    description: siteDescription,
 };
 
 const services = [
     {
         icon: Code2,
         title: 'Web Development',
-        description: 'Custom websites and web applications built with modern technologies for optimal performance and user experience.',
+        description: 'Custom websites and production web applications built with modern frameworks and a clear delivery process.',
         features: ['Responsive for all devices', 'SEO-optimized structure', 'Fast loading times', 'Cross-browser compatible', 'Modern UI/UX'],
         accent: '#6366f1',
         tag: 'Most popular',
@@ -19,8 +20,8 @@ const services = [
     {
         icon: Rocket,
         title: 'Full Stack Development',
-        description: 'End-to-end application development — frontend to backend, database design, and deployment.',
-        features: ['React & Next.js frontend', 'Node.js backend', 'Database design', 'RESTful APIs', 'Auth systems'],
+        description: 'End-to-end application development from frontend architecture to backend systems, database design, and deployment.',
+        features: ['React & Next.js frontend', 'Node.js and NestJS backend', 'Database design', 'RESTful APIs', 'Auth systems'],
         accent: '#f43f5e',
         tag: null,
     },
@@ -43,8 +44,8 @@ const services = [
     {
         icon: Cpu,
         title: 'SaaS Development',
-        description: 'Build your SaaS platform with subscription management and user dashboards.',
-        features: ['Multi-tenant', 'Billing & subscriptions', 'User management', 'Analytics dashboard', 'Email notifications'],
+        description: 'Scalable SaaS platforms, AI-powered tools, dashboards, and multi-tenant systems for real business workflows.',
+        features: ['Multi-tenant architecture', 'AI integrations', 'User management', 'Analytics dashboard', 'Email notifications'],
         accent: '#8b5cf6',
         tag: 'New',
     },
@@ -60,9 +61,9 @@ const services = [
 
 const process = [
     { step: '01', title: 'Discovery', desc: 'Deep dive into your requirements, goals, and audience.' },
-    { step: '02', title: 'Planning', desc: 'Roadmap, wireframes, and technical spec before a single line of code.' },
-    { step: '03', title: 'Development', desc: 'Build with modern stack, clean code, and constant communication.' },
-    { step: '04', title: 'Deployment', desc: 'Ship to production with proper monitoring and handover docs.' },
+    { step: '02', title: 'Planning', desc: 'Roadmap, wireframes, and technical spec shaped around the product and team.' },
+    { step: '03', title: 'Development', desc: 'Build with a modern stack, clean architecture, and steady communication.' },
+    { step: '04', title: 'Deployment', desc: 'Ship to production with monitoring, documentation, and team handover.' },
 ];
 
 export default function ServicesPage() {
@@ -78,7 +79,7 @@ export default function ServicesPage() {
                         <span className="text-gradient">deliver.</span>
                     </h1>
                     <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                        From concept to deployment — professional web development tailored to bring your ideas to life.
+                        From concept to deployment, I build SaaS platforms, AI tools, internal systems, and production web apps as both a freelance developer and agency technical lead.
                     </p>
                     <Link
                         href="/contact"

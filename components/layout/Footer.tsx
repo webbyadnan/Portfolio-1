@@ -35,7 +35,7 @@ export function Footer() {
                             </span>
                         </div>
                         <p className="text-muted-foreground text-sm leading-relaxed">
-                            Full Stack Developer building fast, beautiful, and scalable web products. Available for freelance projects.
+                            Full Stack Developer and Managing Director at GFix Digital, building scalable SaaS platforms, AI-powered tools, and production web apps from Swat, Pakistan.
                         </p>
                         <div className="flex gap-2 mt-5">
                             <a
@@ -115,8 +115,10 @@ export function Footer() {
                         <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-5">Get in Touch</p>
                         <div className="space-y-2">
                             <a href="mailto:adnan.khan114@yahoo.com" className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-200">adnan.khan114@yahoo.com</a>
+                            <a href="mailto:adnanxdev@gmail.com" className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-200">adnanxdev@gmail.com</a>
                             <a href="tel:+923440787723" className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-200">+92 344 0787723</a>
-                            <p className="text-sm text-muted-foreground">Swat, Pakistan 🇵🇰</p>
+                            <p className="text-sm text-muted-foreground">Swat, Pakistan</p>
+                            <a href="https://portal.gfixdigital.com/" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-200">portal.gfixdigital.com</a>
                         </div>
                     </div>
                 </div>

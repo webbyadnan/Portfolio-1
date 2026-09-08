@@ -3,10 +3,18 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 
 export default async function BlogPage() {
-    const posts = await prisma.blogPost.findMany({
-        where: { published: true },
-        orderBy: { createdAt: 'desc' }
-    });
+    let posts: Awaited<ReturnType<typeof prisma.blogPost.findMany>> = [];
+
+    if (process.env.NODE_ENV !== 'development') {
+        try {
+            posts = await prisma.blogPost.findMany({
+                where: { published: true },
+                orderBy: { createdAt: 'desc' }
+            });
+        } catch {
+            posts = [];
+        }
+    }
 
     return (
         <div className="pt-32 pb-24 min-h-screen container mx-auto px-6 max-w-4xl">

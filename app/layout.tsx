@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingAssistant } from "@/components/ai/FloatingAssistant";
 import { VisitorTracker } from "@/components/analytics/VisitorTracker";
+import { siteDescription, siteKeywords } from "@/lib/portfolio";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,26 +28,26 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Adnan Khan — Full Stack Developer",
+    default: "Adnan Khan — Full Stack Developer & Managing Director, GFix Digital",
     template: "%s | Adnan Khan",
   },
-  description: "Full Stack Developer specializing in Next.js, React, Node.js, and modern web technologies. Based in Swat, Pakistan.",
-  keywords: ["Full Stack Developer", "Web Developer", "Next.js", "React", "Node.js", "SaaS", "Swat Pakistan"],
-  authors: [{ name: "Adnan Khan", url: "https://adnankhan.dev" }],
+  description: siteDescription,
+  keywords: siteKeywords,
+  authors: [{ name: "Adnan Khan", url: "https://adnanxdev.site" }],
   creator: "Adnan Khan",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Adnan Khan — Full Stack Developer",
-    description: "Full Stack Developer specializing in Next.js, React, and modern web technologies.",
+    title: "Adnan Khan — Full Stack Developer & Managing Director, GFix Digital",
+    description: "Building scalable SaaS and AI-powered web products from Swat, Pakistan.",
     siteName: "Adnan Khan Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adnan Khan — Full Stack Developer",
-    description: "Full Stack Developer specializing in Next.js, React, and modern web technologies.",
+    title: "Adnan Khan — Full Stack Developer & Managing Director, GFix Digital",
+    description: "Building scalable SaaS and AI-powered web products from Swat, Pakistan.",
     creator: "@adnankhan",
   },
   robots: {
@@ -72,12 +73,12 @@ export default function RootLayout({
     "@type": "Person",
     "name": "Adnan Khan",
     "url": "https://adnanxdev.site",
-    "jobTitle": "Full Stack Developer",
+    "jobTitle": "Full Stack Developer & Managing Director",
     "sameAs": [
       "https://github.com/webbyadnan",
       "https://www.linkedin.com/in/adnan-khan-b9034a31a/"
     ],
-    "description": "Full Stack Developer specializing in Next.js, React, and modern web technologies."
+    "description": siteDescription
   };
 
   return (

@@ -14,6 +14,7 @@ export interface Project {
   tech_stack: string[];
   live_url?: string;
   github_url?: string;
+  video_url?: string | null;
   featured: boolean;
   category: string;
   created_at: string;

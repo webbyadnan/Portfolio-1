@@ -1,4 +1,5 @@
 export async function getRepoStats(githubUrl: string) {
+    if (process.env.NODE_ENV === 'development') return null;
     if (!githubUrl || !githubUrl.includes('github.com')) return null;
 
     try {
@@ -14,8 +15,7 @@ export async function getRepoStats(githubUrl: string) {
             stars: data.stargazers_count,
             forks: data.forks_count,
         };
-    } catch (error) {
-        console.error('Error fetching github stats', error);
+    } catch {
         return null;
     }
 }

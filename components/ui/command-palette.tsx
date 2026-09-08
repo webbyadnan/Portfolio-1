@@ -64,10 +64,28 @@ export function CommandPalette() {
             action: () => { window.open('https://xgpt.adnanxdev.site/', '_blank'); setOpen(false); },
         },
         {
+            id: 'xfer', group: 'Projects', label: 'XFER',
+            sublabel: 'xfer.adnanxdev.site',
+            icon: ArrowUpRight,
+            action: () => { window.open('https://xfer.adnanxdev.site/', '_blank'); setOpen(false); },
+        },
+        {
+            id: 'gfix-portal', group: 'Projects', label: 'GFix Digital Portal',
+            sublabel: 'portal.gfixdigital.com',
+            icon: ArrowUpRight,
+            action: () => { window.open('https://portal.gfixdigital.com/', '_blank'); setOpen(false); },
+        },
+        {
             id: 'email', group: 'Contact', label: 'Send Email',
             sublabel: 'adnan.khan114@yahoo.com',
             icon: Mail,
             action: () => { window.location.href = 'mailto:adnan.khan114@yahoo.com'; setOpen(false); },
+        },
+        {
+            id: 'email-gmail', group: 'Contact', label: 'Send Alternate Email',
+            sublabel: 'adnanxdev@gmail.com',
+            icon: Mail,
+            action: () => { window.location.href = 'mailto:adnanxdev@gmail.com'; setOpen(false); },
         },
         {
             id: 'whatsapp', group: 'Contact', label: 'WhatsApp',
@@ -136,8 +154,6 @@ export function CommandPalette() {
 
     if (!open) return null;
 
-    let flatIdx = 0;
-
     return (
         <div
             className="fixed inset-0 z-[9000] flex items-start justify-center pt-[15vh] px-4"
@@ -190,7 +206,6 @@ export function CommandPalette() {
                                 const Icon = item.icon;
                                 const idx = flat.indexOf(item);
                                 const isActive = idx === activeIdx;
-                                flatIdx++;
                                 return (
                                     <button
                                         key={item.id}

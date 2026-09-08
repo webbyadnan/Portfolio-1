@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
-import { Download, GraduationCap, Code2, Terminal, Database, Cloud, ArrowUpRight } from 'lucide-react';
+import { Download, GraduationCap, Code2, Terminal, Database, Cloud, ArrowUpRight, Users, BrainCircuit } from 'lucide-react';
 import Link from 'next/link';
+import { siteDescription } from '@/lib/portfolio';
 
 export const metadata: Metadata = {
     title: 'About',
-    description: 'Learn more about Adnan Khan — Full Stack Developer from Swat, Pakistan.',
+    description: siteDescription,
 };
 
 const skills = {
     Frontend: {
-        items: ['HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript', 'React.js', 'Next.js', 'Tailwind CSS', 'Framer Motion'],
+        items: ['HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript', 'React.js', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Flutter (Dart)'],
         icon: Code2,
         accent: '#6366f1',
     },
     Backend: {
-        items: ['Node.js', 'Express.js', 'Next.js API Routes', 'RESTful APIs', 'GraphQL', 'JWT Auth'],
+        items: ['Node.js', 'Express.js', 'Next.js API Routes', 'RESTful APIs', 'GraphQL', 'JWT Auth', 'NestJS'],
         icon: Terminal,
         accent: '#10b981',
     },
@@ -28,28 +29,40 @@ const skills = {
         icon: Cloud,
         accent: '#8b5cf6',
     },
+    'AI Integrations': {
+        items: ['Groq', 'Gemini AI', 'DeepSeek', 'Anthropic Claude', 'OpenAI GPT-4'],
+        icon: BrainCircuit,
+        accent: '#f43f5e',
+    },
 };
 
 const timeline = [
     {
-        year: '2024 – Now',
+        year: '2024 – Present',
         title: 'Bachelor of Computer Science',
-        org: 'Iqra National University, Swat',
-        desc: 'Focused on software engineering, web technologies, and database systems.',
+        org: 'Iqra National University, Swat Campus',
+        desc: 'Focused on software engineering, web technologies, database systems, and applied computer science.',
         type: 'edu',
     },
     {
-        year: '2024',
+        year: '2024 – Present',
+        title: 'Managing Director & Technical Team Lead',
+        org: 'GFix Digital',
+        desc: 'Leading a multi-department digital agency. Overseeing technical direction, team training, client project delivery, and internal portal development. Managing intern onboarding and a team of 10+ across technical, creative, training, and management departments.',
+        type: 'leadership',
+    },
+    {
+        year: '2023 – Present',
         title: 'Freelance Full Stack Developer',
-        org: 'Self-employed',
-        desc: 'Built SaaS products and web apps for clients globally. Shipped AI Builder, Resume AI, and xGPT.',
+        org: 'Fiverr & Upwork (@webbyadnan)',
+        desc: 'Building SaaS products, web apps, and AI-powered tools for clients globally. Shipped AI Builder, Resume AI, xGPT, and more.',
         type: 'work',
     },
     {
         year: '2022',
         title: 'Started Web Development',
         org: 'Self-taught',
-        desc: 'Began learning HTML, CSS, and JavaScript. Quickly moved to React and Next.js ecosystem.',
+        desc: 'Began with HTML, CSS, and JavaScript. Rapidly progressed to React, Next.js, Node.js, and full-stack development.',
         type: 'start',
     },
 ];
@@ -68,13 +81,22 @@ export default function AboutPage() {
                             <span className="text-gradient">experiences.</span>
                         </h1>
                         <p className="text-lg text-muted-foreground leading-relaxed mb-6 max-w-lg">
-                            I&apos;m a passionate Full Stack Web Developer with 2+ years of experience building modern,
-                            scalable web applications. Based in Swat, Pakistan, I specialize in creating seamless digital
-                            experiences that solve real-world problems.
+                            I&apos;m Adnan Khan, a full-stack web developer and the Managing Director and Technical Team Lead
+                            at GFix Digital, a digital agency based in Swat, Pakistan.
+                        </p>
+                        <p className="text-muted-foreground leading-relaxed mb-6 max-w-lg">
+                            I lead a multi-department team spanning technical development, creative design, training,
+                            and management. I also oversee intern onboarding through an internal team portal I helped architect.
+                        </p>
+                        <p className="text-muted-foreground leading-relaxed mb-6 max-w-lg">
+                            Alongside my agency work, I&apos;m a freelance developer on Fiverr and Upwork under the handle
+                            @webbyadnan, and I&apos;m currently pursuing a BS in Computer Science at Iqra National University,
+                            Swat Campus.
                         </p>
                         <p className="text-muted-foreground leading-relaxed mb-10 max-w-lg">
-                            From SaaS platforms to AI-powered tools, I build end-to-end solutions with a focus on performance,
-                            clean code, and delightful user interfaces.
+                            I build end-to-end digital solutions: SaaS platforms, AI-powered apps, multi-tenant systems,
+                            and tourism and marketplace platforms. My focus is always performance, clean architecture,
+                            and shipping products that actually work.
                         </p>
                         <div className="flex flex-wrap gap-3">
                             <a
@@ -101,17 +123,24 @@ export default function AboutPage() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                             <div className="absolute bottom-5 left-5 right-5">
                                 <p className="text-white font-display font-bold text-lg">Adnan Khan</p>
-                                <p className="text-white/60 text-sm">Full Stack Developer</p>
+                                <p className="text-white/60 text-sm">Full Stack Developer & Managing Director</p>
                             </div>
                         </div>
                         {/* Stat bubble */}
                         <div className="absolute -right-4 top-10 glass p-5 rounded-2xl shadow-xl">
-                            <div className="text-3xl font-display font-bold text-primary mb-0.5">2+</div>
+                            <div className="text-3xl font-display font-bold text-primary mb-0.5">3+</div>
                             <div className="text-xs text-muted-foreground font-medium">Years of<br />Experience</div>
                         </div>
                         <div className="absolute -left-4 bottom-16 glass p-5 rounded-2xl shadow-xl">
-                            <div className="text-3xl font-display font-bold text-primary mb-0.5">15+</div>
+                            <div className="text-3xl font-display font-bold text-primary mb-0.5">20+</div>
                             <div className="text-xs text-muted-foreground font-medium">Projects<br />Shipped</div>
+                        </div>
+                        <div className="absolute -right-4 bottom-36 glass p-5 rounded-2xl shadow-xl">
+                            <div className="flex items-center gap-2">
+                                <Users className="w-5 h-5 text-primary" />
+                                <div className="text-3xl font-display font-bold text-primary mb-0.5">10+</div>
+                            </div>
+                            <div className="text-xs text-muted-foreground font-medium">Team Members<br />Led</div>
                         </div>
                     </div>
                 </div>

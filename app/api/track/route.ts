@@ -3,6 +3,10 @@ import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 
 export async function POST() {
+    if (process.env.NODE_ENV === 'development') {
+        return NextResponse.json({ success: true, skipped: true });
+    }
+
     try {
         const headerList = await headers();
         const ip = headerList.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
@@ -44,8 +48,7 @@ export async function POST() {
         });
 
         return NextResponse.json({ success: true });
-    } catch (error) {
-        console.error('Tracking error:', error);
-        return NextResponse.json({ success: false }, { status: 500 });
+    } catch {
+        return NextResponse.json({ success: false }, { status: 200 });
     }
 }

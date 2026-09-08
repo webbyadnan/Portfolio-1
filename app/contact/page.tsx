@@ -6,9 +6,11 @@ import Link from 'next/link';
 
 const contactInfo = [
     { icon: Mail, label: 'Email', value: 'adnan.khan114@yahoo.com', href: 'mailto:adnan.khan114@yahoo.com', accent: '#6366f1' },
+    { icon: Mail, label: 'Alternate Email', value: 'adnanxdev@gmail.com', href: 'mailto:adnanxdev@gmail.com', accent: '#8b5cf6' },
     { icon: Phone, label: 'Phone', value: '+92-344-0787723', href: 'tel:+923440787723', accent: '#10b981' },
     { icon: MessageSquare, label: 'WhatsApp', value: '+92-344-0787723', href: 'https://wa.me/923440787723', accent: '#22c55e' },
     { icon: MapPin, label: 'Location', value: 'Swat, Pakistan', href: '#', accent: '#f59e0b' },
+    { icon: MessageSquare, label: 'Agency', value: 'portal.gfixdigital.com', href: 'https://portal.gfixdigital.com/', accent: '#0ea5e9' },
 ];
 
 export default function ContactPage() {
@@ -56,7 +58,7 @@ export default function ContactPage() {
                         <span className="text-gradient">Touch.</span>
                     </h1>
                     <p className="text-lg text-muted-foreground">
-                        Have a project in mind? I&apos;d love to hear about it. Send me a message or reach out via your preferred channel below.
+                        Have a SaaS product, AI tool, internal portal, or agency project in mind? Send me a message or reach out via your preferred channel below.
                     </p>
                 </div>
 

@@ -7,44 +7,33 @@ import { motion } from "framer-motion";
 // ── DATA ────────────────────────────────────────────────────────────
 
 const techStack = [
-  { item: "React", icon: Code2 },
+  { item: "React.js", icon: Code2 },
   { item: "Next.js", icon: Globe },
   { item: "TypeScript", icon: Terminal },
   { item: "Node.js", icon: Database },
   { item: "PostgreSQL", icon: Database },
   { item: "Tailwind CSS", icon: Layers },
+  { item: "Flutter", icon: Cpu },
+  { item: "NestJS", icon: Server },
   { item: "AWS", icon: Cloud },
-  { item: "Docker", icon: Cpu },
+  { item: "Docker", icon: Cloud },
   { item: "GraphQL", icon: Zap },
-  { item: "Redis", icon: Server },
+  { item: "Groq AI", icon: Cpu },
 ];
 
-const projects = [
-  {
-    title: "AI Builder",
-    desc: "AI-powered landing page builder SaaS. Generates stunning, production-ready pages in seconds.",
-    tags: ["Next.js", "NestJS", "Groq AI"],
-    url: "https://aibuilder.adnanxdev.site/",
-    image: "/project-aibuilder.png",
-    num: "01",
-  },
-  {
-    title: "Resume AI",
-    desc: "Intelligent resume builder that crafts compelling, ATS-optimized resumes tailored to job descriptions.",
-    tags: ["Next.js", "Gemini AI", "Firebase"],
-    url: "https://resumeai.adnanxdev.site/",
-    image: "/project-resumeai.png",
-    num: "02",
-  },
-  {
-    title: "xGPT",
-    desc: "Multi-model AI chat app supporting GPT-4, Claude, Gemini, and open-source models.",
-    tags: ["Next.js", "Groq", "DeepSeek"],
-    url: "https://xgpt.adnanxdev.site/",
-    image: "/project-xgpt.png",
-    num: "03",
-  },
-];
+type FeaturedProject = {
+  title: string;
+  desc: string;
+  tags: string[];
+  url?: string | null;
+  image?: string | null;
+  num: string;
+  videoUrl?: string | null;
+  githubStats?: {
+    stars: number;
+    forks: number;
+  } | null;
+};
 
 // ── HERO ─────────────────────────────────────────────────────────────
 
@@ -53,31 +42,34 @@ import { ReactVisual } from "./ReactVisual";
 
 export function HeroSection() {
   return (
-    <section className="pt-40 pb-20 md:pt-52 md:pb-32 container mx-auto px-6 overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="pt-32 pb-16 md:pt-44 md:pb-24 container mx-auto px-6 overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         <div className="max-w-3xl z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground mb-8 leading-[1.1]">
-              Adnan Khan. <br />
-              <span className="text-muted-foreground">Full Stack Developer.</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl leading-relaxed font-light">
-              Full-stack developer and AI enthusiast dedicated to building high-performance web applications. I specialize in crafting scalable SaaS platforms and intelligent digital solutions using Next.js, TypeScript, and modern cloud technologies.
+            <p className="text-sm md:text-base font-semibold text-primary mb-4">
+              Building fast, scalable web products from Swat, Pakistan.
             </p>
-            <div className="flex flex-wrap gap-5">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 leading-[1.08] max-w-3xl">
+              Adnan Khan. <br />
+              <span className="text-muted-foreground">Full Stack Developer & Managing Director.</span>
+            </h1>
+            <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl leading-8">
+              Full-stack developer, agency founder, and technical team lead with 3+ years of experience building SaaS platforms, AI-powered tools, and production web applications. Managing Director and Technical Team Lead at GFix Digital, a digital agency based in Swat, Pakistan. I specialize in Next.js, TypeScript, React, and Node.js, and I ship real products that solve real problems.
+            </p>
+            <div className="flex flex-wrap gap-3">
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-primary/10"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-primary/10"
               >
                 View Work
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 border border-border text-foreground font-bold rounded-2xl hover:bg-secondary active:scale-95 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-bold rounded-xl hover:bg-secondary active:scale-95 transition-all"
               >
                 Get in Touch
               </Link>
@@ -127,7 +119,7 @@ export function TechStackSection() {
 
 // ── PROJECTS ─────────────────────────────────────────────────────────
 
-export function FeaturedProjectsSection({ projects }: { projects: any[] }) {
+export function FeaturedProjectsSection({ projects }: { projects: FeaturedProject[] }) {
   return (
     <section className="py-32 container mx-auto px-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -143,12 +135,15 @@ export function FeaturedProjectsSection({ projects }: { projects: any[] }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-        {projects.map((project) => (
-          <a
+        {projects.map((project) => {
+          const CardTag = project.url ? "a" : "div";
+
+          return (
+          <CardTag
             key={project.title}
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            {...(project.url
+              ? { href: project.url, target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             className="group block"
           >
             <div className="relative aspect-[16/10] rounded-xl overflow-hidden border border-border bg-secondary mb-6">
@@ -162,11 +157,17 @@ export function FeaturedProjectsSection({ projects }: { projects: any[] }) {
                   className="w-full h-full object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 hidden group-hover:block absolute inset-0 z-10"
                 />
               ) : null}
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-full object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
-              />
+              {project.image ? (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-card text-muted-foreground">
+                  <Code2 className="w-12 h-12 opacity-20" />
+                </div>
+              )}
             </div>
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -190,8 +191,8 @@ export function FeaturedProjectsSection({ projects }: { projects: any[] }) {
                 {project.num}
               </div>
             </div>
-          </a>
-        ))}
+          </CardTag>
+        )})}
       </div>
     </section>
   );
@@ -208,7 +209,7 @@ export function CTASection() {
             Ready to build something?
           </h2>
           <p className="text-lg md:text-xl text-background/80 mb-10 leading-relaxed">
-            I am currently available for freelance work and open to full-time opportunities.
+            I am available for freelance work, agency projects through GFix Digital, and technical leadership opportunities.
           </p>
           <Link
             href="mailto:adnanxdev@gmail.com"
